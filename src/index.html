@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="matter.js"></script>
+        <script src="issues.js"></script>
+        <script src="app.js"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            canvas, div {
+                margin-top: 1em;
+                float: left;
+            }
+            div {
+                margin-left: 2em;
+            }
+            .heading {
+                font-weight: bold;
+            }
+            .item {
+                padding-left: 1em;
+            }
+        </style>
+    </head>
+
+
+    <body>
+
+        <template id="stat">
+            <div class="stat">
+                <p class="heading">Checked at: <span class="checked"></span></p>
+                <p class="item">Todo: <span class="todo"></span></p>
+                <p class="item">Done: <span class="done"></span></p>
+            </div>
+        </template>
+
+        <script>
+            init(issues.issues)
+            showStats(issues.stats)
+        </script>
+    </body>
+
+</html>
+

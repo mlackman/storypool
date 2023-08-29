@@ -1,0 +1,16 @@
+DOMAIN_NAME = '<<INSERT HERE>>.atlassian.net'
+USERNAME = '<<<JIRA username>>>'
+PAT = '<<< JIRA PERSONAL ACCESS TOKEN >>>'
+
+#
+# JIRA QUERY
+# Note: Currently the UI (web) will show other Bug types with bigger ball.
+
+JQL = "issuetype=Feature OR issuetype=Bug"
+
+# Example query to take only features with certain label and all bugs
+# JQL = "(labels = somelabel AND issuetype=Feature) OR issuetype=Bug"
+
+
+
+
