@@ -22,6 +22,12 @@
             .item {
                 padding-left: 1em;
             }
+            div.velocity-stats {
+                float: none;
+            }
+            .velocity {
+                font-weight: 700;
+            }
         </style>
     </head>
 
@@ -36,9 +42,16 @@
             </div>
         </template>
 
+        <template id="velocity-stats">
+            <div class="velocity-stats">
+                <h1 class="heading">Estimated to be done: <span class="estimated"></span></h1>
+                <p class="item">Current velocity (issues and bugs / day): <span class="velocity"></span></p>
+            </div>
+        </template>
+
         <script>
-            init(issues.issues)
-            showStats(issues.stats)
+            init(issues.issues);
+            showStats(issues.stats, issues.velocityStats);
         </script>
     </body>
 

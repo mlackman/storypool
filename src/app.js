@@ -1,10 +1,16 @@
 let width = 1200;
 let height = 600;
 
-function showStats(stats) {
+function showStats(stats, velocityStats) {
+  // Show velocity
+  const element = document.getElementById('velocity-stats').content.cloneNode(true);
+  element.querySelector('.estimated').textContent = velocityStats.estimated_done_date;
+  element.querySelector('.velocity').textContent = new Number(velocityStats.done_per_day).toFixed(2);
+  document.getElementsByTagName('body')[0].prepend(element);
+
   const statTemplate = document.getElementById("stat").content;
   stats.forEach((stat) => {
-    element = statTemplate.cloneNode(true);
+    const element = statTemplate.cloneNode(true);
 
     const checkedElement = element.querySelector('.checked');
     checkedElement.textContent = stat.checked_at;
