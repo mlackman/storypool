@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Literal
 import base64
 import requests
 import json
@@ -10,8 +10,9 @@ import config
 @dataclasses.dataclass
 class Issue:
     id: str
-    status: str
-    type: str
+    status: Literal['To Do', 'In Progress', 'Done']
+    type: Literal['Feature', 'Bug', 'Epic']
+    priority: Literal['High', 'Medium', 'Low']
 
 
 @dataclasses.dataclass
@@ -54,7 +55,8 @@ def search_jira(jql: str, basic_auth: str, domain_name: str) -> Generator[Issue,
             fields = issue['fields']
             status = fields['status']['statusCategory']['name']
             issue_type = fields['issuetype']['name']
-            yield Issue(id, status, issue_type)
+            priority = fields['priority']['name']
+            yield Issue(id, status, issue_type, priority)
 
         start_at += 50  # To next page
 
