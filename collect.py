@@ -94,8 +94,8 @@ def calculate_velocity_stats(stats: list[Stats]) -> VelocityStats:
     first_date = datetime.datetime.fromisoformat(first_stats.checked_at).date()
     last_date = datetime.datetime.fromisoformat(last_stats.checked_at).date()
 
-    done_count_on_start = first_stats.todo_count
-    done_count_now = last_stats.todo_count
+    done_count_on_start = first_stats.done_count
+    done_count_now = last_stats.done_count
 
     days_between = (last_date - first_date).days
 
