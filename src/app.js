@@ -9,7 +9,10 @@ function showStats(stats, velocityStats) {
   document.getElementsByTagName('body')[0].prepend(element);
 
   const statTemplate = document.getElementById("stat").content;
-  stats.forEach((stat) => {
+
+  const statsToShow = stats && stats.length > 4 ? [stats[0], ...stats.slice(stats.length-3)] : stats;
+
+  statsToShow.forEach((stat) => {
     const element = statTemplate.cloneNode(true);
 
     const checkedElement = element.querySelector('.checked');
