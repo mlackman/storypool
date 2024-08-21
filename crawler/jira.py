@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Generator
 import json
 
@@ -5,11 +6,16 @@ import requests
 
 from .collect import Issue
 
+@dataclass(frozen=True)
+class JiraConfig:
+    basic_auth: str
+    domain_name: str
 
-def search_jira(jql: str, basic_auth: str, domain_name: str) -> Generator[Issue, Issue, None]:
+
+def search_jira(jql: str, config: JiraConfig) -> Generator[Issue, Issue, None]:
 
     headers = {
-        'authorization': basic_auth,
+        'authorization': config.basic_auth,
         'content-type': 'application/json'
     }
 
@@ -20,7 +26,7 @@ def search_jira(jql: str, basic_auth: str, domain_name: str) -> Generator[Issue,
             "startAt": start_at
         }
 
-        r = requests.post(f'https://{domain_name}/rest/api/2/search', data=json.dumps(payload), headers=headers)
+        r = requests.post(f'https://{config.domain_name}/rest/api/2/search', data=json.dumps(payload), headers=headers)
         r.raise_for_status()
 
         issues = r.json()['issues']

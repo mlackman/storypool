@@ -2,7 +2,7 @@ import base64
 import datetime
 
 from .collect import update_stats, get_stats, calculate_velocity_stats, create_issues_js
-from .jira import search_jira
+from .jira import search_jira, JiraConfig
 from .types import Stats
 import config
 
@@ -17,7 +17,9 @@ def basic_auth(username: str, pat: str) -> str:
 if __name__ == '__main__':
     auth = basic_auth(config.USERNAME, config.PAT)
 
-    issues = [issue for issue in search_jira(config.JQL, auth, config.DOMAIN_NAME)]
+    jira_config = JiraConfig(auth, config.DOMAIN_NAME)
+
+    issues = [issue for issue in search_jira(config.JQL, jira_config)]
 
     checked_at: str = datetime.datetime.now().isoformat()
 
