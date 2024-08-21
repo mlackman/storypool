@@ -3,7 +3,8 @@ import datetime
 
 import config
 
-from .collect import search_jira, update_stats, get_stats, calculate_velocity_stats, create_issues_js, Stats
+from .collect import  update_stats, get_stats, calculate_velocity_stats, create_issues_js, Stats
+from .jira import search_jira
 
 
 def basic_auth(username: str, pat: str) -> str:
