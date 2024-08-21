@@ -1,4 +1,4 @@
-let width = 1200;
+let width = 800;
 let height = 600;
 
 function showStats(stats, velocityStats) {

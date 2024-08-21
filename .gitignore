@@ -332,6 +332,6 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/python,node,vim
-src/issues.js
+web/issues.js
 stats
 config.py

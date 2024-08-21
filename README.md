@@ -18,11 +18,11 @@ pip install -r requirements.txt
 
 Run
 ```
-python collect.py
+python -m crawler
 ```
 
 View story pool in browser
 
 ```
-open ./src/index.html
+open ./web/index.html
 ```

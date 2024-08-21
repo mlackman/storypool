@@ -1,10 +1,8 @@
 from typing import Generator, Literal
-import base64
 import requests
 import json
 import dataclasses
 import datetime
-import config
 
 
 @dataclasses.dataclass
@@ -26,14 +24,6 @@ class Stats:
 class VelocityStats:
     done_per_day: float
     estimated_done_date: str
-
-
-def basic_auth(username: str, pat: str) -> str:
-    credentials = f'{username}:{pat}'
-    encoded_creds: bytes = base64.b64encode(credentials.encode())
-    b64_creds: str = encoded_creds.decode()
-    return f'Basic {b64_creds}'
-
 
 def search_jira(jql: str, basic_auth: str, domain_name: str) -> Generator[Issue, Issue, None]:
 
@@ -59,12 +49,27 @@ def search_jira(jql: str, basic_auth: str, domain_name: str) -> Generator[Issue,
         for issue in issues:
             id = issue['key']
             fields = issue['fields']
-            status = fields['status']['statusCategory']['name']
+
+            if is_development_done(fields['status']['name']):
+                status = 'Done'
+            else:
+                status = fields['status']['statusCategory']['name']
             issue_type = fields['issuetype']['name']
             priority = fields['priority']['name']
             yield Issue(id, status, issue_type, priority)
 
         start_at += 50  # To next page
+
+
+def is_development_done(issue_status: str) -> bool:
+    return issue_status.upper() in (
+        "READY FOR PRODUCTION RELEASE",
+        "READY FOR PRODUCTION DEPLOYMENT",
+        "READY FOR QA",
+        "READY FOR UAT",
+        "IN QA",
+        "DONE"
+    )
 
 
 def update_stats(checked_at: str, issues: list[Issue]) -> None:
@@ -117,20 +122,6 @@ def create_issues_js(stats: list[Stats], velocity_stats: VelocityStats, issues: 
         'issues': [dataclasses.asdict(issue) for issue in issues],
     }
 
-    with open('src/issues.js', 'wt') as f:
+    with open('web/issues.js', 'wt') as f:
         issues_json = json.dumps(results)
         f.write(f'const issues={issues_json}')
-
-
-if __name__ == '__main__':
-    auth = basic_auth(config.USERNAME, config.PAT)
-
-    issues = [issue for issue in search_jira(config.JQL, auth, config.DOMAIN_NAME)]
-
-    checked_at: str = datetime.datetime.now().isoformat()
-
-    update_stats(checked_at, issues)
-    stats: list[Stats] = get_stats()
-    velocity_stats = calculate_velocity_stats(stats)
-
-    create_issues_js(stats, velocity_stats, issues)
