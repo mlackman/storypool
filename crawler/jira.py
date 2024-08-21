@@ -1,15 +1,17 @@
 from dataclasses import dataclass
-from typing import Generator
+from typing import Generator, Sequence
 import json
 
 import requests
 
 from .collect import Issue
 
+
 @dataclass(frozen=True)
 class JiraConfig:
     basic_auth: str
     domain_name: str
+    done_statuses: Sequence[str]
 
 
 def search_jira(jql: str, config: JiraConfig) -> Generator[Issue, Issue, None]:
@@ -37,23 +39,16 @@ def search_jira(jql: str, config: JiraConfig) -> Generator[Issue, Issue, None]:
             id = issue['key']
             fields = issue['fields']
 
-            if is_development_done(fields['status']['name']):
+            issue_status = fields['status']['name']
+            is_development_done = issue_status in config.done_statuses
+
+            if is_development_done:
                 status = 'Done'
             else:
                 status = fields['status']['statusCategory']['name']
+
             issue_type = fields['issuetype']['name']
             priority = fields['priority']['name']
             yield Issue(id, status, issue_type, priority)
 
         start_at += 50  # To next page
-
-
-def is_development_done(issue_status: str) -> bool:
-    return issue_status.upper() in (
-        "READY FOR PRODUCTION RELEASE",
-        "READY FOR PRODUCTION DEPLOYMENT",
-        "READY FOR QA",
-        "READY FOR UAT",
-        "IN QA",
-        "DONE"
-    )

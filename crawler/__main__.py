@@ -17,7 +17,9 @@ def basic_auth(username: str, pat: str) -> str:
 if __name__ == '__main__':
     auth = basic_auth(config.USERNAME, config.PAT)
 
-    jira_config = JiraConfig(auth, config.DOMAIN_NAME)
+    done_statuses = [status.upper() for status in config.DONE_STATUSES]
+
+    jira_config = JiraConfig(auth, config.DOMAIN_NAME, done_statuses)
 
     issues = [issue for issue in search_jira(config.JQL, jira_config)]
 

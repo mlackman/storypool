@@ -2,6 +2,9 @@ DOMAIN_NAME = '<<INSERT HERE>>.atlassian.net'
 USERNAME = '<<<JIRA username>>>'
 PAT = '<<< JIRA PERSONAL ACCESS TOKEN >>>'
 
+# Example strings of jira statuses, which will be considered as Done in stats
+DONE_STATUSES=['DONE', 'READY FOR PRODUCTION DEPLOYMENT']
+
 #
 # JIRA QUERY
 # Note: Currently the UI (web) will show other Bug types with bigger ball.
