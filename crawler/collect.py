@@ -1,28 +1,8 @@
-from typing import Literal
 import json
 import dataclasses
 import datetime
 
-
-@dataclasses.dataclass
-class Issue:
-    id: str
-    status: Literal['To Do', 'In Progress', 'Done']
-    type: Literal['Feature', 'Bug', 'Epic']
-    priority: Literal['High', 'Medium', 'Low']
-
-
-@dataclasses.dataclass
-class Stats:
-    checked_at: str
-    todo_count: int
-    done_count: int
-
-
-@dataclasses.dataclass
-class VelocityStats:
-    done_per_day: float
-    estimated_done_date: str
+from .types import Issue, Stats, VelocityStats
 
 
 def update_stats(checked_at: str, issues: list[Issue]) -> None:

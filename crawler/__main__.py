@@ -1,10 +1,10 @@
 import base64
 import datetime
 
-import config
-
-from .collect import  update_stats, get_stats, calculate_velocity_stats, create_issues_js, Stats
+from .collect import update_stats, get_stats, calculate_velocity_stats, create_issues_js
 from .jira import search_jira
+from .types import Stats
+import config
 
 
 def basic_auth(username: str, pat: str) -> str:

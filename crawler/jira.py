@@ -1,6 +1,7 @@
 from typing import Generator
-import requests
 import json
+
+import requests
 
 from .collect import Issue
 
