@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Generator, Sequence, Callable, TypeVar
+import base64
 import json
 
 import requests
@@ -13,15 +14,21 @@ IssueFactory = Callable[[JiraIssue, DoneStatues], IssueType]
 
 @dataclass(frozen=True)
 class JiraConfig:
-    basic_auth: str
+    username: str
+    pat: str
     domain_name: str
     done_statuses: Sequence[str]
 
+    def basic_auth(self) -> str:
+        credentials = f'{self.username}:{self.pat}'
+        encoded_creds: bytes = base64.b64encode(credentials.encode())
+        b64_creds: str = encoded_creds.decode()
+        return f'Basic {b64_creds}'
+
 
 def search_jira[T](jql: str, factory: IssueFactory[T], config: JiraConfig) -> Generator[T, T, None]:
-
     headers = {
-        'authorization': config.basic_auth,
+        'authorization': config.basic_auth(),
         'content-type': 'application/json'
     }
 

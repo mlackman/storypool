@@ -8,6 +8,27 @@ from .types import Issue, Stats
 import config
 
 
+def main():
+    done_statuses = [status.upper() for status in config.DONE_STATUSES]
+
+    jira_config = JiraConfig(
+        username=config.USERNAME,
+        pat=config.PAT,
+        domain_name=config.DOMAIN_NAME,
+        done_statuses=done_statuses
+    )
+
+    issues = list(search_jira(config.JQL, issue_factory, jira_config))
+
+    checked_at: str = datetime.datetime.now().isoformat()
+
+    update_stats(checked_at, issues)
+    stats: list[Stats] = get_stats()
+    velocity_stats = calculate_velocity_stats(stats)
+
+    create_issues_js(stats, velocity_stats, issues)
+
+
 def basic_auth(username: str, pat: str) -> str:
     credentials = f'{username}:{pat}'
     encoded_creds: bytes = base64.b64encode(credentials.encode())
@@ -33,18 +54,4 @@ def issue_factory(issue: JiraIssue, done_statuses: Sequence[str]) -> Issue:
 
 
 if __name__ == '__main__':
-    auth = basic_auth(config.USERNAME, config.PAT)
-
-    done_statuses = [status.upper() for status in config.DONE_STATUSES]
-
-    jira_config = JiraConfig(auth, config.DOMAIN_NAME, done_statuses)
-
-    issues = [issue for issue in search_jira(config.JQL, issue_factory, jira_config)]
-
-    checked_at: str = datetime.datetime.now().isoformat()
-
-    update_stats(checked_at, issues)
-    stats: list[Stats] = get_stats()
-    velocity_stats = calculate_velocity_stats(stats)
-
-    create_issues_js(stats, velocity_stats, issues)
+    main()
