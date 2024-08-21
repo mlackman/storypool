@@ -1,10 +1,14 @@
 from dataclasses import dataclass
-from typing import Generator, Sequence
+from typing import Generator, Sequence, Callable, TypeVar
 import json
 
 import requests
 
-from .collect import Issue
+
+JiraIssue = dict
+DoneStatues = Sequence[str]
+IssueType = TypeVar('IssueType')
+IssueFactory = Callable[[JiraIssue, DoneStatues], IssueType]
 
 
 @dataclass(frozen=True)
@@ -14,7 +18,7 @@ class JiraConfig:
     done_statuses: Sequence[str]
 
 
-def search_jira(jql: str, config: JiraConfig) -> Generator[Issue, Issue, None]:
+def search_jira[T](jql: str, factory: IssueFactory[T], config: JiraConfig) -> Generator[T, T, None]:
 
     headers = {
         'authorization': config.basic_auth,
@@ -36,19 +40,6 @@ def search_jira(jql: str, config: JiraConfig) -> Generator[Issue, Issue, None]:
             return
 
         for issue in issues:
-            id = issue['key']
-            fields = issue['fields']
-
-            issue_status = fields['status']['name']
-            is_development_done = issue_status in config.done_statuses
-
-            if is_development_done:
-                status = 'Done'
-            else:
-                status = fields['status']['statusCategory']['name']
-
-            issue_type = fields['issuetype']['name']
-            priority = fields['priority']['name']
-            yield Issue(id, status, issue_type, priority)
+            yield factory(issue, config.done_statuses)
 
         start_at += 50  # To next page
