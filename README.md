@@ -16,6 +16,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Create config.py
+```
+mv config.py.COPYME config.py
+```
+
+Modify config.py according to the instructions
+
 Run
 ```
 python -m crawler

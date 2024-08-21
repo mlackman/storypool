@@ -7,7 +7,7 @@ DONE_STATUSES=['DONE', 'READY FOR PRODUCTION DEPLOYMENT']
 
 #
 # JIRA QUERY
-# Note: Currently the UI (web) will show other Bug types with bigger ball.
+# Note: Currently the UI (web) will show other than Bug types with bigger ball.
 
 JQL = "issuetype=Feature OR issuetype=Bug"
 
