@@ -113,15 +113,22 @@ function getRandomInt(min, max) {
 function createIssue(issue, bounds) {
   const startHeigth = bounds.min.y + 50;
   const x = getRandomInt(bounds.min.x + 30, bounds.max.x - 30)
-  const radius = issue.type === 'Feature' ? 15 : 10;
+  const radius = issue.type === 'Bug' ? 10 : 15;
   const circle = Bodies.circle(x, startHeigth, radius);
 
-  color_map = {
+  const priorityColorMap = {
+    'Low': '#fdc500',
+    'Medium': '#fd8c00',
+    'High': '#dc0000',
+    'Critical': '#780000'
+  };
+
+  const colorMap = {
     'To Do': 'pink',
     'In Progress': 'lightgreen',
     'Done': 'green'
-  }
-  circle.render.fillStyle = color_map[issue.status]
+  };
+  circle.render.fillStyle =  issue.status == 'To Do' ? priorityColorMap[issue.priority] : colorMap[issue.status];
   circle.render.strokeStyle = "black";
   circle.render.lineWidth= "2";
 

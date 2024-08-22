@@ -6,7 +6,7 @@ import dataclasses
 class Issue:
     id: str
     status: Literal['To Do', 'In Progress', 'Done']
-    type: Literal['Feature', 'Bug', 'Epic']
+    type: Literal['Feature', 'Bug', 'Epic', 'Story', 'Task']
     priority: Literal['High', 'Medium', 'Low']
 
 
